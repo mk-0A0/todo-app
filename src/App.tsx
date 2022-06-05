@@ -3,7 +3,7 @@ import {useState} from "react"
 import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, Text, theme} from "@chakra-ui/react"
 
 export const App = () => {
-  const [incompleteTodos, setIncompleteTodos] = useState<string[]>(['aaaaaaaaa', 'vbbbbbbbbbb', 'ccccccccccc', 'dddddddddd'])
+  const [incompleteTodos, setIncompleteTodos] = useState<string[]>([])
   const [completeTodos, setCompleteTodos] = useState<string[]>(['todo1', 'todo2', 'todo3'])
 
   const [todo, setTodo] = useState('')
@@ -35,6 +35,16 @@ export const App = () => {
     setCompleteTodos(newCompleteTodosResult)
   }
 
+  const onCLickBack = (index: number) => {
+    const newTodos = [...completeTodos]
+    const newCompleteTodos = newTodos.filter((_, i) => i !== index)
+    setCompleteTodos(newCompleteTodos)
+
+    const newIncompleteTodos = [...incompleteTodos]
+    const newIncompleteTodosResult = [...newIncompleteTodos, completeTodos[index]]
+    setIncompleteTodos(newIncompleteTodosResult)
+  }
+
   return (
     <ChakraProvider theme={theme}>
       <Container py={20}>
@@ -49,7 +59,7 @@ export const App = () => {
             <Text fontWeight={"bold"}>未完了のTODO</Text>
             <Grid gap={5} mt={5}>
               {incompleteTodos.map((todo, index) => (
-                <Flex key={index} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
+                <Flex key={`incomplete_${index}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{todo}</Text>
                   <Flex gap={5}>
@@ -63,11 +73,11 @@ export const App = () => {
           <Box bgColor={"green.50"} p={10}>
             <Text fontWeight={"bold"}>完了のTODO</Text>
             <Grid gap={5} mt={5}>
-              {completeTodos.map((todo) => (
-                <Flex key={todo} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
+              {completeTodos.map((todo, index) => (
+                <Flex key={`complete_${index}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{todo}</Text>
-                  <Button>戻す</Button>
+                  <Button onClick={() => onCLickBack(index)}>戻す</Button>
                 </Flex>
               ))}
             </Grid>
