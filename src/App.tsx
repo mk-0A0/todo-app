@@ -3,8 +3,8 @@ import {useState} from "react"
 import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, Text, theme} from "@chakra-ui/react"
 
 export const App = () => {
-  const [incompleteTodos, setIncompleteTodos] = useState<string[]>([])
-  const completeTodos = ['todo1', 'todo2', 'todo3']
+  const [incompleteTodos, setIncompleteTodos] = useState<string[]>(['aaaaaaaaa', 'vbbbbbbbbbb', 'ccccccccccc', 'dddddddddd'])
+  const [completeTodos, setCompleteTodos] = useState<string[]>(['todo1', 'todo2', 'todo3'])
 
   const [todo, setTodo] = useState('')
 
@@ -25,6 +25,16 @@ export const App = () => {
     setIncompleteTodos(newIncompleteTodos)
   }
 
+  const onCLickComplete = (index: number) => {
+    const newTodos = [...incompleteTodos]
+    const newIncompleteTodos = newTodos.filter((_, i) => i !== index)
+    setIncompleteTodos(newIncompleteTodos)
+
+    const newCompleteTodos = [...completeTodos]
+    const newCompleteTodosResult = [...newCompleteTodos, incompleteTodos[index]]
+    setCompleteTodos(newCompleteTodosResult)
+  }
+
   return (
     <ChakraProvider theme={theme}>
       <Container py={20}>
@@ -43,7 +53,7 @@ export const App = () => {
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{todo}</Text>
                   <Flex gap={5}>
-                    <Button>完了</Button>
+                    <Button onClick={() => onCLickComplete(index)}>完了</Button>
                     <Button onClick={() => onClickRemove(index)}>削除</Button>
                   </Flex>
                 </Flex>
@@ -53,7 +63,7 @@ export const App = () => {
           <Box bgColor={"green.50"} p={10}>
             <Text fontWeight={"bold"}>完了のTODO</Text>
             <Grid gap={5} mt={5}>
-              {incompleteTodos.map((todo) => (
+              {completeTodos.map((todo) => (
                 <Flex key={todo} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{todo}</Text>
