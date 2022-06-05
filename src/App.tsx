@@ -4,45 +4,30 @@ import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, 
 
 export const App = () => {
   const [incompleteTodos, setIncompleteTodos] = useState<string[]>([])
-  const [completeTodos, setCompleteTodos] = useState<string[]>(['todo1', 'todo2', 'todo3'])
-
+  const [completeTodos, setCompleteTodos] = useState<string[]>([])
   const [todo, setTodo] = useState('')
-
-  const onClickAdd = () => {
-    const newTodos = [...incompleteTodos]
-    const newCompleteTodos = [...newTodos, todo]
-    setIncompleteTodos(newCompleteTodos)
-    setTodo('')
-  }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value)
   }
 
+  const onClickAdd = () => {
+    setIncompleteTodos(prevState => [...prevState, todo])
+    setTodo('')
+  }
+
   const onClickRemove = (index: number) => {
-    const newTodos = [...incompleteTodos]
-    const newIncompleteTodos = newTodos.filter((_, i) => i !== index)
-    setIncompleteTodos(newIncompleteTodos)
+    setIncompleteTodos(prevState => prevState.filter((_, i) => i !== index))
   }
 
   const onCLickComplete = (index: number) => {
-    const newTodos = [...incompleteTodos]
-    const newIncompleteTodos = newTodos.filter((_, i) => i !== index)
-    setIncompleteTodos(newIncompleteTodos)
-
-    const newCompleteTodos = [...completeTodos]
-    const newCompleteTodosResult = [...newCompleteTodos, incompleteTodos[index]]
-    setCompleteTodos(newCompleteTodosResult)
+    setIncompleteTodos(prevState => prevState.filter((_, i) => i !== index))
+    setCompleteTodos(prevState => [...prevState, incompleteTodos[index]])
   }
 
   const onCLickBack = (index: number) => {
-    const newTodos = [...completeTodos]
-    const newCompleteTodos = newTodos.filter((_, i) => i !== index)
-    setCompleteTodos(newCompleteTodos)
-
-    const newIncompleteTodos = [...incompleteTodos]
-    const newIncompleteTodosResult = [...newIncompleteTodos, completeTodos[index]]
-    setIncompleteTodos(newIncompleteTodosResult)
+    setCompleteTodos(prevState => prevState.filter((_, i) => i !== index))
+    setIncompleteTodos(prevState => [...prevState, completeTodos[index]])
   }
 
   return (
