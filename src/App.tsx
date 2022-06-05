@@ -3,15 +3,15 @@ import {useState} from "react"
 import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, Text, theme} from "@chakra-ui/react"
 
 export const App = () => {
-  const incompleteTodos = ['todo1', 'todo2', 'todo3']
-  const [completeTodos, setCompleteTodos] = useState<string[]>([])
+  const [incompleteTodos, setIncompleteTodos] = useState<string[]>([])
+  const completeTodos = ['todo1', 'todo2', 'todo3']
 
   const [todo, setTodo] = useState('')
 
   const onClickAdd = () => {
-    const newTodos = [...completeTodos]
+    const newTodos = [...incompleteTodos]
     const newCompleteTodos = [...newTodos, todo]
-    setCompleteTodos(newCompleteTodos)
+    setIncompleteTodos(newCompleteTodos)
     setTodo('')
   }
 
@@ -20,9 +20,9 @@ export const App = () => {
   }
 
   const onClickRemove = (index: number) => {
-    const newTodos = [...completeTodos]
-    const newCompleteTodos = newTodos.filter((_, i) => i !== index)
-    setCompleteTodos(newCompleteTodos)
+    const newTodos = [...incompleteTodos]
+    const newIncompleteTodos = newTodos.filter((_, i) => i !== index)
+    setIncompleteTodos(newIncompleteTodos)
   }
 
   return (
@@ -38,7 +38,7 @@ export const App = () => {
           <Box bgColor={"blue.50"} p={10}>
             <Text fontWeight={"bold"}>未完了のTODO</Text>
             <Grid gap={5} mt={5}>
-              {completeTodos.map((todo, index) => (
+              {incompleteTodos.map((todo, index) => (
                 <Flex key={index} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{todo}</Text>
