@@ -1,33 +1,34 @@
 import * as React from "react"
 import {useState} from "react"
 import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, Text, theme} from "@chakra-ui/react"
+import {uid} from "uid";
 
 export const App = () => {
   const [todo, setTodo] = useState('')
-  const [todos, setTodos] = useState<{ name: string, isDone: boolean }[]>([])
+  const [todos, setTodos] = useState<{ name: string, isDone: boolean, uid: string }[]>([])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value)
   }
 
   const onClickAdd = () => {
-    setTodos(prevState => [...prevState, {name: todo, isDone: false}])
+    setTodos(prevState => [...prevState, {name: todo, isDone: false, uid: uid()}])
     setTodo('')
   }
 
-  const onClickRemove = (index: number) => {
-    setTodos(prevState => prevState.filter((_, i) => i !== index))
+  const onClickRemove = (uid: string) => {
+    setTodos(prevState => prevState.filter(({uid: _uid}) => uid !== _uid))
   }
 
-  const onCLickComplete = (index: number) => {
-    setTodos(prevState => prevState.map(({name, isDone}, i) => {
-      return {name, isDone: i === index ? true : isDone}
+  const onCLickComplete = (uid: string) => {
+    setTodos(prevState => prevState.map(({name, isDone, uid: _uid}) => {
+      return {name, isDone: _uid === uid ? true : isDone, uid: _uid}
     }))
   }
 
-  const onCLickBack = (index: number) => {
-    setTodos(prevState => prevState.map(({name, isDone}, i) => {
-      return {name, isDone: i === index ? false : isDone}
+  const onCLickBack = (uid: string) => {
+    setTodos(prevState => prevState.map(({name, isDone, uid: _uid}) => {
+      return {name, isDone: _uid === uid ? false : isDone, uid: _uid}
     }))
   }
 
@@ -44,13 +45,13 @@ export const App = () => {
           <Box bgColor={"blue.50"} p={10}>
             <Text fontWeight={"bold"}>未完了のTODO</Text>
             <Grid gap={5} mt={5}>
-              {todos.filter(({isDone}) => !isDone).map(({name, isDone}, index) => (
-                <Flex key={`incomplete_${index}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
+              {todos.filter(({isDone}) => !isDone).map(({name, isDone, uid}) => (
+                <Flex key={`incomplete_${uid}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{name}</Text>
                   <Flex gap={5}>
-                    <Button onClick={() => onCLickComplete(index)}>完了</Button>
-                    <Button onClick={() => onClickRemove(index)}>削除</Button>
+                    <Button onClick={() => onCLickComplete(uid)}>完了</Button>
+                    <Button onClick={() => onClickRemove(uid)}>削除</Button>
                   </Flex>
                 </Flex>
               ))}
@@ -59,11 +60,11 @@ export const App = () => {
           <Box bgColor={"green.50"} p={10}>
             <Text fontWeight={"bold"}>完了のTODO</Text>
             <Grid gap={5} mt={5}>
-              {todos.filter(({isDone}) => isDone).map(({name}, index) => (
-                <Flex key={`complete_${index}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
+              {todos.filter(({isDone}) => isDone).map(({name, uid}) => (
+                <Flex key={`complete_${uid}`} borderBottomColor={'gray.200'} borderBottomWidth={1} pb={5}
                       justifyContent={"space-between"} alignItems={"center"}>
                   <Text>{name}</Text>
-                  <Button onClick={() => onCLickBack(index)}>戻す</Button>
+                  <Button onClick={() => onCLickBack(uid)}>戻す</Button>
                 </Flex>
               ))}
             </Grid>
