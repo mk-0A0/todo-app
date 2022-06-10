@@ -4,16 +4,16 @@ import {Box, Button, ChakraProvider, Container, Flex, FormControl, Grid, Input, 
 import {uid} from "uid";
 
 export const App = () => {
-  const [todo, setTodo] = useState('')
+  const [nameInput, setNameInput] = useState('')
   const [todos, setTodos] = useState<{ name: string, isDone: boolean, uid: string }[]>([])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodo(e.target.value)
+    setNameInput(e.target.value)
   }
 
   const onClickAdd = () => {
-    setTodos(prevState => [...prevState, {name: todo, isDone: false, uid: uid()}])
-    setTodo('')
+    setTodos(prevState => [...prevState, {name: nameInput, isDone: false, uid: uid()}])
+    setNameInput('')
   }
 
   const onClickRemove = (uid: string) => {
@@ -38,7 +38,7 @@ export const App = () => {
         <Grid gap={10}>
           <Flex gap={5}>
             <FormControl>
-              <Input type='text' placeholder={'TODOを入力'} value={todo} onChange={onChange}/>
+              <Input type='text' placeholder={'TODOを入力'} value={nameInput} onChange={onChange}/>
             </FormControl>
             <Button onClick={onClickAdd}>追加</Button>
           </Flex>
